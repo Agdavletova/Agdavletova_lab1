@@ -5,6 +5,7 @@
 using namespace std;
 struct CompressionStation
 {
+	
 	int id_cs;
 	string title;
 	int number;
@@ -33,6 +34,11 @@ void PrintPipe(pipe&p)
 	cout << "You entered length=" << p.length << endl;
 	cout << "You enetered diameter=" << p.diameter << endl;
 	cout << "You entered number=" << p.number << endl;
+
+}
+void menu()
+{
+	cout << "1.Enter the pipe\n" << "2.Enter the Compression Station\n" << "3.Viewing objects\n" << "4.Edit a pipe\n" << "5.Edit a Comression Station\n" << "6.Save\n" << "7.Download\n";
 
 }
 CompressionStation CreateCompressionStation()
@@ -64,11 +70,28 @@ pipe CreatePipe()
 }
 int main()
 {
-	pipe p = CreatePipe();
-	PrintPipe(p);
-	CompressionStation cs = CreateCompressionStation();
-	PrintCompressionStation(cs);
+	pipe p;
+	CompressionStation cs;
+	int i;
 
+	menu();
+	cin >> i;
+	switch (i)
+	{
+	case 1:p = CreatePipe();
+		PrintPipe(p);
+		break;
+	case 2:
+		 cs = CreateCompressionStation();
+		PrintCompressionStation(cs);
+		break;
+		
+	default: cout << "Data not correct";
+		break;
+	}
+	
+	
+	
 	return 0;
 }
 
