@@ -2,6 +2,7 @@
 //
 
 #include <iostream>
+#include <string>
 using namespace std;
 struct CompressionStation
 {
@@ -18,6 +19,7 @@ struct pipe
 	double length;
 	double diameter;
 	int number;
+	string sign;
 };
 void PrintCompressionStation(CompressionStation& cs)
 {
@@ -34,11 +36,28 @@ void PrintPipe(pipe&p)
 	cout << "You entered length=" << p.length << endl;
 	cout << "You enetered diameter=" << p.diameter << endl;
 	cout << "You entered number=" << p.number << endl;
+	cout << "Sign a pipe:" << p.sign << endl;
 
 }
+
+void EditPipe(pipe& p)
+{
+	string sign2;
+	cout<< "Enter a new sign a pipe"<< endl;
+	cin >> p.sign;
+	sign2 == p.sign;
+		
+}
+
+void MenuEditPipe()
+{
+	cout <<  "1.Edit priznak\n";
+}
+
 void menu()
 {
-	cout << "1.Enter the pipe\n" << "2.Enter the Compression Station\n" << "3.Viewing objects\n" << "4.Edit a pipe\n" << "5.Edit a Comression Station\n" << "6.Save\n" << "7.Download\n";
+	cout << "1.Enter the pipe\n" << "2.Enter the Compression Station\n" << "3.Viewing objects\n" << "4.Edit a pipe\n" << "5.Edit a Comression Station\n" << "6.Save\n" << "7.Download\n" << "0.Exit";
+
 
 }
 CompressionStation CreateCompressionStation()
@@ -60,6 +79,7 @@ pipe CreatePipe()
 {
 	pipe p;
 	p.id = 0;
+	p.sign = "Under repair";
 	cout << "Enter length:";
 	cin >> p.length;
 	cout << "Enter diameter:";
@@ -68,31 +88,66 @@ pipe CreatePipe()
 	cin >> p.number;
 	return p;
 }
+int get_vari(int count)
+{
+	int vari;
+	string s;
+getline (cin, s); // считываем строку
+
+	// пока ввод некорректен, сообщаем об этом и просим повторить его
+	
+	
+
+	return vari;
+
+}
 int main()
 {
 	pipe p;
 	CompressionStation cs;
-	int i;
 
-	menu();
-	cin >> i;
-	switch (i)
+	int h;
+	int vari;
+	do
 	{
-	case 1:p = CreatePipe();
-		PrintPipe(p);
-		break;
-	case 2:
-		 cs = CreateCompressionStation();
-		PrintCompressionStation(cs);
-		break;
-		
-	default: cout << "Data not correct";
-		break;
+		menu();
+		vari = get_vari(7);
+		cin >> vari;
+		switch (vari)
+		{
+		case 1:p = CreatePipe();
+			PrintPipe(p);
+			break;
+		case 2:
+			cs = CreateCompressionStation();
+			PrintCompressionStation(cs);
+			break;
+		case 4:
+			system("cls");
+			MenuEditPipe();
+			cin >> h;
+			switch (h)
+			{
+			case 1:  EditPipe(p);
+				PrintPipe(p);
+				break;
+				{
+			default: cout << "Data not correct";
+				break;
+				}
+
+				break;
+			}
+
+
+
+			return 0;
+		}
+
+		if (vari != 7)
+			system("pause");
 	}
-	
-	
-	
-	return 0;
+while (vari != 7);
 }
 
 // Запуск программы: CTRL+F5 или меню "Отладка" > "Запуск без отладки"
