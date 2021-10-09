@@ -92,15 +92,19 @@ int get_vari(int count)
 {
 	int vari;
 	string s;
-getline (cin, s); // считываем строку
+	getline(cin, s); 
 
-	// пока ввод некорректен, сообщаем об этом и просим повторить его
+	while (sscanf_s(s.c_str(), "%d", &vari) != 1 || vari < 1 || vari > count)
+	{
+		cout << "Incorrect input. Try again: "; 
+		getline(cin, s);
+
+	}
+
+		return vari;
+
 	
-	
-
-	return vari;
-
-}
+};
 int main()
 {
 	pipe p;
