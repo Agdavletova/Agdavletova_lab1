@@ -90,7 +90,7 @@ void SavePipeAndCompressionStation( const pipe& p,  const CompressionStation& cs
 	fout.open("data.txt", ios::out);
 	if (p.diameter != 0 && p.length != 0)
 	{
-		fout << "Pipe" << endl;
+		fout << "Pipe:" << endl;
 		fout << p.id << endl;
 		fout << p.length << endl;
 		fout  << p.diameter << endl;
@@ -100,7 +100,7 @@ void SavePipeAndCompressionStation( const pipe& p,  const CompressionStation& cs
 		cout << "Pipe not added" << endl;
 	if (cs.number != 0)
 	{
-		fout << "CompressionStation" << endl;
+		fout << "Compression Station:" << endl;
 		fout <<  cs.id_cs << endl;
 		fout <<  cs.title << endl;
 		fout << cs.number << endl;
@@ -111,7 +111,7 @@ void SavePipeAndCompressionStation( const pipe& p,  const CompressionStation& cs
 		cout << "Compression Station not added" << endl;
 	fout.close();
 }
-void LoadPipeAndCompressionStation(const pipe& p, const CompressionStation& cs)
+void LoadPipeAndCompressionStation( pipe& p,  CompressionStation& cs)
 {
 	ifstream fin;
 	string str;
@@ -120,25 +120,27 @@ void LoadPipeAndCompressionStation(const pipe& p, const CompressionStation& cs)
 	if (str == "Pipe:")
 	{
 		getline(fin, str);
-		p.id == stoi(str);
+		p.id = stoi(str);
 		getline(fin, str);
-		p.length == stod(str);
+		p.length = stod(str);
 		getline(fin, str);
-		p.diameter == stod(str);
+		p.diameter = stod(str);
+		getline(fin, str);
+		p.sign = str;
 	}
 	getline(fin, str);
 	if (str == "Compression Station:")
 	{
 		getline(fin, str);
-		cs.id_cs == stoi(str);
+		cs.id_cs = stoi(str);
 		getline(fin, str);
-		cs.title == str;
+		cs.title = str;
 		getline(fin, str);
-		cs.number == stoi(str);
+		cs.number = stoi(str);
 		getline(fin, str);
-		cs.number_workshops == stoi(str);
+		cs.number_workshops = stoi(str);
 		getline(fin, str);
-		cs.efficiency == stod(str);
+		cs.efficiency = stod(str);
 	}
 }
 
@@ -152,7 +154,7 @@ void menu() //МЕНЮ
 		<< "5.Edit a Comression Station\n"
 		<< "6.Save\n"
 		<< "7.Load\n"
-		<< "8.Exit\n";
+		<<"8.Exit\n";
 
 
 }
@@ -238,7 +240,7 @@ int main() //вызов
 			break;
 		case 7:
 			LoadPipeAndCompressionStation(p, cs);
-		
+			break;
 	}
 
 
