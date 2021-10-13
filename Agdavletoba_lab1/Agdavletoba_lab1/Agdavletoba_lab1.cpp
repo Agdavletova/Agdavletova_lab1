@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <string>
+#include <fstream>
 using namespace std;
 struct CompressionStation// тип КС
 {
@@ -40,12 +41,16 @@ void PrintPipe(pipe&p)
 }
 
 void EditPipe(pipe& p)//редактирование трубы
-{   
-	string sign2;
-	cout<< "Enter a new sign a pipe"<< endl;
-	cin >> p.sign;
-	sign2 == p.sign;
-
+{
+	if (p.diameter != 0 && p.length != 0)
+	{
+		string sign2;
+		cout << "Enter a new sign a pipe" << endl;
+		cin >> p.sign;
+		sign2 == p.sign;
+	}
+	else
+		cout << "Pipe not added" << endl;
 }
 int check()// проверка правильности ввода 
 {
@@ -68,17 +73,86 @@ int check()// проверка правильности ввода
 
 
 void EditCompessionStation(CompressionStation& cs)//редактирование КС
+{ 
+	if (cs.number != 0)
+	{
+		int number_workshops2;
+		cout << "Enter a new number  of working manufactories" << endl;
+		cin >> cs.number_workshops;
+		number_workshops2 == cs.number_workshops;
+	}
+	else
+		cout << "Compression Station not added" << endl;
+}
+void SavePipeAndCompressionStation( const pipe& p,  const CompressionStation& cs)
 {
-	int number_workshops2;
-    cout << "Enter a new number  of working manufactories" << endl;
-	cin >> cs.number_workshops;
-	number_workshops2 == cs.number_workshops;
+	ofstream fout;
+	fout.open("data.txt", ios::out);
+	if (p.diameter != 0 && p.length != 0)
+	{
+		fout << "Pipe" << endl;
+		fout << p.id << endl;
+		fout << p.length << endl;
+		fout  << p.diameter << endl;
+		fout  << p.sign << endl;
+	}
+	else
+		cout << "Pipe not added" << endl;
+	if (cs.number != 0)
+	{
+		fout << "CompressionStation" << endl;
+		fout <<  cs.id_cs << endl;
+		fout <<  cs.title << endl;
+		fout << cs.number << endl;
+		fout << cs.number_workshops << endl;
+		fout  << cs.efficiency << endl;
+	}
+	else
+		cout << "Compression Station not added" << endl;
+	fout.close();
+}
+void LoadPipeAndCompressionStation(const pipe& p, const CompressionStation& cs)
+{
+	ifstream fin;
+	string str;
+	fin.open("data.txt", ios::in);
+	getline(fin, str);
+	if (str == "Pipe:")
+	{
+		getline(fin, str);
+		p.id == stoi(str);
+		getline(fin, str);
+		p.length == stod(str);
+		getline(fin, str);
+		p.diameter == stod(str);
+	}
+	getline(fin, str);
+	if (str == "Compression Station:")
+	{
+		getline(fin, str);
+		cs.id_cs == stoi(str);
+		getline(fin, str);
+		cs.title == str;
+		getline(fin, str);
+		cs.number == stoi(str);
+		getline(fin, str);
+		cs.number_workshops == stoi(str);
+		getline(fin, str);
+		cs.efficiency == stod(str);
+	}
 }
 
 void menu() //МЕНЮ
 {
 	system("cls");
-	cout << "1.Enter the pipe\n" << "2.Enter the Compression Station\n" << "3.Viewing objects\n" << "4.Edit a pipe\n" << "5.Edit a Comression Station\n" << "6.Save\n" << "7.Download\n" << "0.Exit\n";
+	cout << "1.Enter the pipe\n"
+		<< "2.Enter the Compression Station\n"
+		<< "3.Print objects\n"
+		<< "4.Edit a pipe\n"
+		<< "5.Edit a Comression Station\n"
+		<< "6.Save\n"
+		<< "7.Load\n"
+		<< "8.Exit\n";
 
 
 }
@@ -88,7 +162,7 @@ CompressionStation CreateCompressionStation()//создание кс
 	cs.id_cs = 0;
 	cout << "Enter title:";
 	cin >> cs.title;
-	cout << "Enteifr number manufactories:";
+	cout << "Enter the  number of manufactories:";
 	cin >> cs.number;
 	cs.number = check();
 	cout << "Enter the number of working manufactories:";
@@ -135,13 +209,12 @@ int main() //вызов
 {
 	pipe p;
 	CompressionStation cs;
-	int k;
-	int h;
+	
 	int vari;
 	do
 	{
 		menu();
-		vari = get_vari(7);
+		vari = get_vari(8);
 		cin >> vari;
 		switch (vari)
 		{
@@ -153,21 +226,27 @@ int main() //вызов
 			PrintCompressionStation(cs);
 			break;
 		case 4:  EditPipe(p);
+			
+			break;
+		case 3:
 			PrintPipe(p);
-			break;
-
-		case 5: EditCompessionStation(cs);
 			PrintCompressionStation(cs);
+		case 5: EditCompessionStation(cs);
 			break;
+		case 6:
+			SavePipeAndCompressionStation(p, cs);
+			break;
+		case 7:
+			LoadPipeAndCompressionStation(p, cs);
 		
-		return 0;
 	}
 
 
-			if (vari != 7) //бесконечный цикл
+			if (vari != 8) //бесконечный цикл
 			system("pause");
 	}
-while (vari != 7);
+while (vari != 8);
+	return 0; 
 }
 
 // Запуск программы: CTRL+F5 или меню "Отладка" > "Запуск без отладки"
