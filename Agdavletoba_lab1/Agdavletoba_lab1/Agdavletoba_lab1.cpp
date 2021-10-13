@@ -4,7 +4,7 @@
 #include <iostream>
 #include <string>
 using namespace std;
-struct CompressionStation
+struct CompressionStation// тип КС
 {
 	
 	int id_cs;
@@ -13,7 +13,7 @@ struct CompressionStation
 	int number_workshops;
 	double efficiency;
 };
-struct pipe
+struct pipe //тип труба
 {
 	int id;
 	double length;
@@ -35,81 +35,107 @@ void PrintPipe(pipe&p)
 {
 	cout << "You entered length=" << p.length << endl;
 	cout << "You enetered diameter=" << p.diameter << endl;
-	cout << "You entered number=" << p.number << endl;
 	cout << "Sign a pipe:" << p.sign << endl;
 
 }
 
-void EditPipe(pipe& p)
-{
+void EditPipe(pipe& p)//редактирование трубы
+{   
 	string sign2;
 	cout<< "Enter a new sign a pipe"<< endl;
 	cin >> p.sign;
 	sign2 == p.sign;
-		
-}
 
-void MenuEditPipe()
+}
+int check()// проверка правильности ввода 
 {
-	cout <<  "1.Edit priznak\n";
+	int proverca;
+	while (true)
+	{
+		cin >> proverca;
+		if (cin.fail() || proverca < 0  || proverca>100000000 )
+		{
+			cin.clear();
+			cin.ignore(32767, '\n');
+			cout << "Error" << endl;
+
+		}
+		else
+			return proverca;
+	}
+
 }
 
-void menu()
+
+void EditCompessionStation(CompressionStation& cs)//редактирование КС
 {
-	cout << "1.Enter the pipe\n" << "2.Enter the Compression Station\n" << "3.Viewing objects\n" << "4.Edit a pipe\n" << "5.Edit a Comression Station\n" << "6.Save\n" << "7.Download\n" << "0.Exit";
+	int number_workshops2;
+    cout << "Enter a new number  of working manufactories" << endl;
+	cin >> cs.number_workshops;
+	number_workshops2 == cs.number_workshops;
+}
+
+void menu() //МЕНЮ
+{
+	system("cls");
+	cout << "1.Enter the pipe\n" << "2.Enter the Compression Station\n" << "3.Viewing objects\n" << "4.Edit a pipe\n" << "5.Edit a Comression Station\n" << "6.Save\n" << "7.Download\n" << "0.Exit\n";
 
 
 }
-CompressionStation CreateCompressionStation()
+CompressionStation CreateCompressionStation()//создание кс
 {
 	CompressionStation cs;
 	cs.id_cs = 0;
 	cout << "Enter title:";
 	cin >> cs.title;
-	cout << "Enter number manufactories:";
+	cout << "Enteifr number manufactories:";
 	cin >> cs.number;
-	cout << "Enter the number of workshops:";
+	cs.number = check();
+	cout << "Enter the number of working manufactories:";
 	cin >> cs.number_workshops;
+	cs.number_workshops = check();
 	cout << "Enter efficiency:";
 	cin >> cs.efficiency;
+	cs.efficiency = check();
 	return cs;
 }
 
-pipe CreatePipe()
+
+pipe CreatePipe()//создание трубы
 {
+
 	pipe p;
 	p.id = 0;
 	p.sign = "Under repair";
 	cout << "Enter length:";
 	cin >> p.length;
+	p.length = check();
 	cout << "Enter diameter:";
 	cin >> p.diameter;
-	cout << "Number of stations under repair:";
-	cin >> p.number;
+	p.diameter = check();
 	return p;
 }
-int get_vari(int count)
+
+
+int get_vari(int count)//считывание номера в меню
 {
 	int vari;
 	string s;
 	getline(cin, s); 
-
 	while (sscanf_s(s.c_str(), "%d", &vari) != 1 || vari < 1 || vari > count)
 	{
-		cout << "Incorrect input. Try again: "; 
+		cout << "Incorrect input. Try again:\n"; 
 		getline(cin, s);
 
 	}
-
 		return vari;
-
-	
 };
-int main()
+
+int main() //вызов
 {
 	pipe p;
 	CompressionStation cs;
-
+	int k;
 	int h;
 	int vari;
 	do
@@ -126,29 +152,19 @@ int main()
 			cs = CreateCompressionStation();
 			PrintCompressionStation(cs);
 			break;
-		case 4:
-			system("cls");
-			MenuEditPipe();
-			cin >> h;
-			switch (h)
-			{
-			case 1:  EditPipe(p);
-				PrintPipe(p);
-				break;
-				{
-			default: cout << "Data not correct";
-				break;
-				}
+		case 4:  EditPipe(p);
+			PrintPipe(p);
+			break;
 
-				break;
-			}
+		case 5: EditCompessionStation(cs);
+			PrintCompressionStation(cs);
+			break;
+		
+		return 0;
+	}
 
 
-
-			return 0;
-		}
-
-		if (vari != 7)
+			if (vari != 7) //бесконечный цикл
 			system("pause");
 	}
 while (vari != 7);
