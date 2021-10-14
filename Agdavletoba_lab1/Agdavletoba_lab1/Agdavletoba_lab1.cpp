@@ -19,9 +19,9 @@ struct pipe //тип труба
 	int id = 0;
 	double length = 0;
 	double diameter = 0;
-	string sign; 
+	bool sign; //!!!!!!!!!!!!!!!!!!!!!
 };
-void PrintCompressionStation(CompressionStation& cs)
+void PrintCompressionStation( const CompressionStation& cs)//????????????
 {
 	if (cs.number != 0)
 	{
@@ -37,7 +37,7 @@ void PrintCompressionStation(CompressionStation& cs)
 }
 
 
-void PrintPipe(pipe&p)
+void PrintPipe(const pipe&p)//?????????????
 {
 	if (p.length != 0)
 	{
@@ -55,10 +55,10 @@ void EditPipe(pipe& p)//редактирование трубы
 {
 	if (p.diameter != 0 && p.length != 0)
 	{
-		string sign2;
+	
 		cout << "Enter a new sign a pipe" << endl;
 		cin >> p.sign;
-		sign2 == p.sign;
+		
 	}
 	else
 		cout << "Pipe not added" << endl;
@@ -87,10 +87,14 @@ void EditCompessionStation(CompressionStation& cs)//редактирование
 { 
 	if (cs.number != 0)
 	{
-		int number_workshops2;
+		
 		cout << "Enter a new number  of working manufactories" << endl;
-		cin >> cs.number_workshops;
-		number_workshops2 == cs.number_workshops;
+		 cs.number_workshops = check();//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+		while (cs.number_workshops > cs.number)
+		{
+			cout << "Error ";
+			cs.number_workshops = check();
+		}
 	}
 	else
 		cout << "Compression Station not added" << endl;
@@ -137,7 +141,7 @@ void LoadPipeAndCompressionStation( pipe& p,  CompressionStation& cs)
 		getline(fin, str);
 		p.diameter = stod(str);
 		getline(fin, str);
-		p.sign = str;
+		p.sign = str=="1";
 	}
 	getline(fin, str);
 	if (str == "Compression Station:")
@@ -174,20 +178,26 @@ CompressionStation CreateCompressionStation()//создание кс
 	CompressionStation cs;
 	cs.id_cs = 0;
 	cout << "Enter title:";
-	cin >> cs.title;
+	cin.ignore(10000, '\n');
+	getline(cin, cs.title);
 	cout << "Enter the  number of manufactories:";
 	cs.number = check();
 	cout << "Enter the number of working manufactories:";
 	cs.number_workshops = check();
+	while (cs.number_workshops > cs.number)
+	{
+		cout << "Error ";
+		cs.number_workshops = check();
+	}
 	cout << "Enter efficiency:";
 	cs.efficiency = check();
 	return cs;
 }
 
 
+
 pipe CreatePipe()//создание трубы
 {
-
 	pipe p;
 	p.id = 0;
 	p.sign = "Under repair";
@@ -225,28 +235,37 @@ int main() //вызов
 		vari = get_vari();
 		switch (vari)
 		{
-		case 1:p = CreatePipe();
+		case 1:
+		{
+			p = CreatePipe();
 			PrintPipe(p);
 			break;
+		}
 		case 2:
+		{
 			cs = CreateCompressionStation();
 			PrintCompressionStation(cs);
 			break;
-		case 4:  EditPipe(p);
-			
+		}
+		case 4:
+		{
+			EditPipe(p);
+
 			break;
+		}
 		case 3:
 			PrintPipe(p);
 			PrintCompressionStation(cs);
+			break;
 		case 5: EditCompessionStation(cs);
 			break;
-		case 6: 
+		case 6:
 			SavePipeAndCompressionStation(p, cs);
 			break;
 		case 7:
 			LoadPipeAndCompressionStation(p, cs);
 			break;
-	}
+		}
 
 
 			if (vari != 8) //бесконечный цикл
