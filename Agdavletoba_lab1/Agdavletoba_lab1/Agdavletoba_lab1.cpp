@@ -4,11 +4,14 @@
 #include <iostream>
 #include <string>
 #include <fstream>
+#include <ctime>
+#include <vector>
+
 using namespace std;
 struct CompressionStation// тип КС
 {
 	
-	int id_cs = 0;
+	int id = 0;
 	string title;
 	int number = 0;
 	int number_workshops = 0;
@@ -16,11 +19,20 @@ struct CompressionStation// тип КС
 };
 struct pipe //тип труба
 {
+	string name;
 	int id = 0;
 	double length = 0;
 	double diameter = 0;
 	bool sign; //!!!!!!!!!!!!!!!!!!!!!
 };
+int Identification()
+{
+	int ID;
+	srand(time(NULL));
+	ID = 200 + rand() % 101;
+	return ID;
+}
+
 void PrintCompressionStation( const CompressionStation& cs)//????????????
 {
 	if (cs.number != 0)
@@ -116,7 +128,7 @@ void SavePipeAndCompressionStation( const pipe& p,  const CompressionStation& cs
 	if (cs.number != 0)
 	{
 		fout << "Compression Station:" << endl;
-		fout <<  cs.id_cs << endl;
+		fout <<  cs.id << endl;
 		fout <<  cs.title << endl;
 		fout << cs.number << endl;
 		fout << cs.number_workshops << endl;
@@ -147,7 +159,7 @@ void LoadPipeAndCompressionStation( pipe& p,  CompressionStation& cs)
 	if (str == "Compression Station:")
 	{
 		getline(fin, str);
-		cs.id_cs = stoi(str);
+		cs.id = stoi(str);
 		getline(fin, str);
 		cs.title = str;
 		getline(fin, str);
@@ -176,7 +188,7 @@ void menu() //МЕНЮ
 CompressionStation CreateCompressionStation()//создание кс
 {
 	CompressionStation cs;
-	cs.id_cs = 0;
+	cs.id = 0;
 	cout << "Enter title:";
 	cin.ignore(10000, '\n');
 	getline(cin, cs.title);
@@ -209,6 +221,106 @@ pipe CreatePipe()//создание трубы
 }
 
 
+
+
+void AddPipe_vector(vector <pipe>& vector_p)
+{
+	pipe p;
+	cout << "Add a pipe" << vector_p.size() + 1 << endl;
+	int Id_pipe;
+	Id_pipe = Identification();
+	p.id = Id_pipe;
+	cout << "Enter a name  of pipe" << endl;
+	cin >> p.name;
+	cout << "Enter diameter  of pipe" << endl;
+	p.diameter = check();
+	cout << "Enter  length of pipe" << endl;
+	p.length = check();
+	cout << "Pipe sign :(0-No,1-Yes )" << endl;
+	cin >> p.sign;
+	vector_p.push_back(p);
+
+}
+void AddCompressionStation_vector(vector <CompressionStation>& vector_cs)
+{
+	CompressionStation cs;
+	cout << "Add a Compression Station" << vector_cs.size() + 1 << endl;
+	int Id_cs;
+	Id_cs = Identification();
+	cs.id = Id_cs;
+	cout << "Enter title:";
+	cin.ignore(10000, '\n');
+	getline(cin, cs.title);
+	cout << "Enter the  number of manufactories:  " << endl;
+	cs.number = check();
+	cout << "Enter the number of working manufactories:";
+	cs.number_workshops = check();
+	cout << "Enter efficiency:";
+	cs.efficiency = check();
+	vector_cs.push_back(cs);
+}
+void PrintVectors(const vector <pipe>& vector_p, const vector <CompressionStation>& vector_cs)
+{
+	int i;
+	cout << "Pipes:" << endl;
+	cout << "ID:" << endl;
+	for (int i = 1; i < vector_p.size() + 1; ++i)
+	{
+		cout << vector_p[i - 1].id; cout << endl;
+	}
+	cout << "Diameter:" << endl;
+	
+	for (int i = 1; i < vector_p.size() + 1; ++i) 
+	{ 
+		cout << vector_p[i - 1].diameter; cout << endl; 
+	}
+	cout << "Length:" << endl;
+
+	for (int i = 1; i < vector_p.size() + 1; ++i) 
+	{ 
+		cout << vector_p[i - 1].length; cout << endl;
+	}
+	cout << "Priznak: " << endl;
+	
+	for (int i = 1; i < vector_p.size() + 1; ++i) 
+	{
+		if (vector_p[i - 1].sign == 0)
+		{
+			cout << "The pipe is not in sign now" << endl;
+		}
+		if (vector_p[i - i].sign == 1) {
+			cout << "The pipe is in sign now" << endl;
+		}
+	}
+	cout << "Compression Station:" << endl;
+	cout << "ID:" << endl;
+	for (int i = 1; i < vector_cs.size() + 1; ++i)
+	{ 
+		cout << vector_cs[i - 1].id; cout << endl;
+	}
+	cout << "Titles" << endl;
+	for (int i = 1; i < vector_cs.size() + 1; ++i)
+	{ 
+		cout << vector_cs[i - 1].title; cout << endl;
+	}
+	cout << "Number of manufactories : " << endl;
+	for (int i = 1; i < vector_cs.size() + 1; ++i)
+	{
+		cout << vector_cs[i - 1].number; cout << endl;
+	}
+	cout << "Number of working manufactories:"<< endl;
+	for (int i = 1; i < vector_cs.size() + 1; ++i)
+	{
+		cout << vector_cs[i - 1].number_workshops; cout << endl;
+	}
+	cout << "Efficiency:" << endl;
+
+	for (int i = 1; i < vector_cs.size() + 1; ++i)
+	{ 
+		cout << vector_cs[i - 1].efficiency; cout << endl;
+	}
+}
+
 int get_vari()//считывание номера в меню
 {
 	int vari;
@@ -225,9 +337,10 @@ int get_vari()//считывание номера в меню
 
 int main() //вызов
 {
-	pipe p;
-	CompressionStation cs;
-	
+	vector <pipe> vector_p; vector_p.resize(0);
+	pipe p{};
+    vector <CompressionStation> vector_cs; vector_cs.resize(0);
+	CompressionStation cs{};
 	int vari;
 	do
 	{
@@ -236,15 +349,12 @@ int main() //вызов
 		switch (vari)
 		{
 		case 1:
-		{
-			p = CreatePipe();
-			PrintPipe(p);
+		{   AddPipe_vector(vector_p);
 			break;
 		}
 		case 2:
 		{
-			cs = CreateCompressionStation();
-			PrintCompressionStation(cs);
+			AddCompressionStation_vector(vector_cs);
 			break;
 		}
 		case 4:
@@ -254,8 +364,9 @@ int main() //вызов
 			break;
 		}
 		case 3:
-			PrintPipe(p);
-			PrintCompressionStation(cs);
+			
+			PrintVectors(vector_p, vector_cs);
+			//PrintCompressionStation(vector_cs);
 			break;
 		case 5: EditCompessionStation(cs);
 			break;
