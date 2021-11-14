@@ -52,19 +52,7 @@ void PrintCompressionStation( const CompressionStation& cs)//????????????
 }
 
 
-void PrintPipe(const pipe&p)//?????????????
-{
-	if (p.length != 0)
-	{
-		cout << "You entered length=" << p.length << endl;
-		cout << "You enetered diameter=" << p.diameter << endl;
-		cout << "Sign a pipe:" << p.sign << endl;
-	}
-	else
-	{
-		cout << "Pipe not added" << endl;
-	}
-}
+
 
 void EditPipe(pipe& p)//редактирование трубы
 {
@@ -114,65 +102,8 @@ void EditCompessionStation(CompressionStation& cs)//редактирование
 	else
 		cout << "Compression Station not added" << endl;
 }
-void SavePipeAndCompressionStation( const pipe& p,  const CompressionStation& cs)
-{
-	ofstream fout;
-	fout.open("data.txt", ios::out);
-	if (p.diameter != 0 && p.length != 0)
-	{
-		fout << "Pipe:" << endl;
-		fout << p.id << endl;
-		fout << p.length << endl;
-		fout  << p.diameter << endl;
-		fout  << p.sign << endl;
-	}
-	else
-		cout << "Pipe not added" << endl;
-	if (cs.number != 0)
-	{
-		fout << "Compression Station:" << endl;
-		fout <<  cs.id << endl;
-		fout <<  cs.title << endl;
-		fout << cs.number << endl;
-		fout << cs.number_workshops << endl;
-		fout  << cs.efficiency << endl;
-	}
-	else
-		cout << "Compression Station not added" << endl;
-	fout.close();
-}
-void LoadPipeAndCompressionStation( pipe& p,  CompressionStation& cs)
-{
-	ifstream fin;
-	string str;
-	fin.open("data.txt", ios::in);
-	getline(fin, str);
-	if (str == "Pipe:")
-	{
-		getline(fin, str);
-		p.id = stoi(str);
-		getline(fin, str);
-		p.length = stod(str);
-		getline(fin, str);
-		p.diameter = stod(str);
-		getline(fin, str);
-		p.sign = str=="1";
-	}
-	getline(fin, str);
-	if (str == "Compression Station:")
-	{
-		getline(fin, str);
-		cs.id = stoi(str);
-		getline(fin, str);
-		cs.title = str;
-		getline(fin, str);
-		cs.number = stoi(str);
-		getline(fin, str);
-		cs.number_workshops = stoi(str);
-		getline(fin, str);
-		cs.efficiency = stod(str);
-	}
-}
+
+	
 
 void menu() //МЕНЮ
 {
@@ -323,11 +254,22 @@ void PrintVectors(const vector <pipe>& vector_p, const vector <CompressionStatio
 		cout << vector_cs[i - 1].efficiency; cout << endl;
 	}
 }
-string Mas_string(int lines)
+string *Mas_string(int lines)
 {
 	string* mas = new string [lines];
 	return mas;
 }
+bool *Mas_bool(int lines)
+{
+	bool* mas = new bool[lines];
+	return mas;
+}
+int* Mas_int(int lines)
+{
+	int* mas = new int[lines];
+	return mas;
+}
+
 void Search_pipe_name(vector <pipe>& vector_p)
 {
 	string name;
@@ -349,7 +291,7 @@ void Search_pipe_name(vector <pipe>& vector_p)
 	}
 	if (index != 0)
 	{
-		cout << " The pipe wih name: " << choice << " has number " << index << endl; 
+		cout << " The name of the pipe: " << choice << endl << " Index: " << index << endl; 
 		cout << "Id: " << endl
 			<< vector_p[index-1].id << endl
 			<< "Diameter: " << endl
@@ -362,10 +304,54 @@ void Search_pipe_name(vector <pipe>& vector_p)
 	}
 	else
 	{
-		cout << "This pipe not create";
+		cout << "This is no such pipe";
 	}
 	delete[] mass;
 }
+void  Search_Pipe_Sign(vector <pipe>& vector_p)
+{
+	bool sign;
+	int k= 0;
+	bool choice;
+	bool* mass = Mas_bool(vector_p.size());
+	int* mas_s = Mas_int(vector_p.size());
+	for (int i = 0; i < vector_p.size(); i++)
+	{
+		mass[i] = vector_p[i].sign;
+	}
+	cout << "Enter the pipe attribute (0-ender repair; 1- not in repair)   ";;
+	cin >> choice;
+	for (int i = 0; i < vector_p.size(); i++)
+	{
+		if (mass[i] == choice)
+		{
+			mas_s[k++]= i;
+		}
+		
+	}
+	if (k != 0)
+	{
+		for (int i = 0; i < k; i++)
+		{
+			cout << " Pipes with the entered attribyte:  " << choice << endl << "has index  " << i+1 << endl;
+			cout << "Name: ";
+			cout << vector_p[i].name << endl;
+	    	cout << "Id: ";
+			cout << vector_p[i].id << endl;
+				cout << "Diameter: ";
+			cout << vector_p[i].diameter << endl;
+				cout << "Length: ";
+				cout << vector_p[i].length << endl;
+		}
+	}
+	else
+	{
+		cout << "This is no such pipe";
+	}
+	delete[] mass;
+
+}
+
 int get_vari()//считывание номера в меню
 {
 	int vari;
@@ -416,10 +402,10 @@ int main() //вызов
 		case 5: EditCompessionStation(cs);
 			break;
 		case 6:
-			SavePipeAndCompressionStation(p, cs);
+			Search_Pipe_Sign(vector_p);
 			break;
 		case 7:
-			LoadPipeAndCompressionStation(p, cs);
+			
 			break;
 		}
 
