@@ -7,7 +7,10 @@
 #include <ctime>
 #include <vector>
 
+
 using namespace std;
+
+
 struct CompressionStation// тип КС
 {
 	
@@ -223,7 +226,7 @@ pipe CreatePipe()//создание трубы
 
 
 
-void AddPipe_vector(vector <pipe>& vector_p)
+void AddPipe_vector(vector <pipe> &vector_p)
 {
 	pipe p;
 	cout << "Add a pipe" << vector_p.size() + 1 << endl;
@@ -264,9 +267,9 @@ void PrintVectors(const vector <pipe>& vector_p, const vector <CompressionStatio
 	int i;
 	cout << "Pipes:" << endl;
 	cout << "ID:" << endl;
-	for (int i = 1; i < vector_p.size() + 1; ++i)
+	for (int i = 0; i < vector_p.size(); ++i)
 	{
-		cout << vector_p[i - 1].id; cout << endl;
+		cout << vector_p[i].id; cout << endl;
 	}
 	cout << "Diameter:" << endl;
 	
@@ -320,7 +323,49 @@ void PrintVectors(const vector <pipe>& vector_p, const vector <CompressionStatio
 		cout << vector_cs[i - 1].efficiency; cout << endl;
 	}
 }
+string Mas_string(int lines)
+{
+	string* mas = new string [lines];
+	return mas;
+}
+void Search_pipe_name(vector <pipe>& vector_p)
+{
+	string name;
+	int index = 0;
+	string choice;
+	string* mass = Mas_string(vector_p.size());
+	for (int i = 0; i < vector_p.size(); i++)
+	{
+		mass[i] = vector_p[i].name;
+	}
+	cout << "Enter name of pipe" << endl;
+	cin >> choice;
+	for (int i = 0; i < vector_p.size(); i++)
+	{
+		if (mass[i] == choice)
+		{
+			index = i + 1;
+		}
+	}
+	if (index != 0)
+	{
+		cout << " The pipe wih name: " << choice << " has number " << index << endl; 
+		cout << "Id: " << endl
+			<< vector_p[index-1].id << endl
+			<< "Diameter: " << endl
+			<< vector_p[index-1].diameter << endl
+			<< "Length: " << endl
+			<< vector_p[index-1].length << endl
+			<< "In repair: " << endl
+			<< vector_p[index-1].sign << endl;
 
+	}
+	else
+	{
+		cout << "This pipe not create";
+	}
+	delete[] mass;
+}
 int get_vari()//считывание номера в меню
 {
 	int vari;
@@ -359,7 +404,7 @@ int main() //вызов
 		}
 		case 4:
 		{
-			EditPipe(p);
+			Search_pipe_name(vector_p);
 
 			break;
 		}
