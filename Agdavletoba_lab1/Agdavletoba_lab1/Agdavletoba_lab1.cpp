@@ -19,6 +19,7 @@ struct CompressionStation// тип КС
 	int number = 0;
 	int number_workshops = 0;
 	double efficiency = 0;
+	int percent;
 };
 struct pipe //тип труба
 {
@@ -108,16 +109,28 @@ void EditCompessionStation(CompressionStation& cs)//редактирование
 void menu() //МЕНЮ
 {
 	system("cls");
-	cout << "1.Enter the pipe\n"
-		<< "2.Enter the Compression Station\n"
+	cout << "1.Add a pipe\n"
+		<< "2.Add a Compression Station\n"
 		<< "3.Print objects\n"
-		<< "4.Edit a pipe\n"
-		<< "5.Edit a Comression Station\n"
+		<< "4.Pipe searh\n"
+		<< "5.Compression Station search"
 		<< "6.Save\n"
 		<< "7.Load\n"
 		<<"8.Exit\n";
 
 
+}
+void menu_1()
+{
+	system("cls");
+		cout << "1.Search by name" << endl;
+	cout << "2.Search by attribete" << endl;
+}
+void menu_2()
+{
+	system("cls");
+	cout << "1.Search by name" << endl;
+	cout << "2.Search by percent" << endl;
 }
 CompressionStation CreateCompressionStation()//создание кс
 {
@@ -192,6 +205,7 @@ void AddCompressionStation_vector(vector <CompressionStation>& vector_cs)
 	cout << "Enter efficiency:";
 	cs.efficiency = check();
 	vector_cs.push_back(cs);
+	cs.percent = ((cs.number - cs.number_workshops) / cs.number) * 100;
 }
 void PrintVectors(const vector <pipe>& vector_p, const vector <CompressionStation>& vector_cs)
 {
@@ -264,7 +278,7 @@ bool *Mas_bool(int lines)
 	bool* mas = new bool[lines];
 	return mas;
 }
-int* Mas_int(int lines)
+int *Mas_int(int lines)
 {
 	int* mas = new int[lines];
 	return mas;
@@ -351,6 +365,92 @@ void  Search_Pipe_Sign(vector <pipe>& vector_p)
 	delete[] mass;
 
 }
+void Search_CS_Name(vector <CompressionStation>& vector_cs)
+{
+	string title;
+	int index = 0;
+	string choice;
+	string* mass = Mas_string(vector_cs.size());
+	for (int i = 0; i < vector_cs.size(); i++)
+	{
+		mass[i] = vector_cs[i].title;
+	}
+	cout << "Enter the title of the Compression Station:   ";
+	cin >> choice;
+	for (int i = 0; i < vector_cs.size(); i++)
+	{
+		if (mass[i] == choice)
+		{
+			index = i + 1;
+		}
+	}
+	if (index != 0)
+	{
+		cout << " The title of the compression station: " << choice << endl << " Index: " << index << endl;
+		cout << "Id: " << endl
+			<< vector_cs[index - 1].id << endl
+			<< "Number of manufactories : " << endl
+			<< vector_cs[index - 1].number << endl
+			<< "Number of working manufactories: " << endl
+			<< vector_cs[index - 1].number_workshops << endl
+			<< "Efficiency: " << endl
+			<< vector_cs[index - 1].efficiency << endl;
+
+	}
+	else
+	{
+		cout << "This is no such pipe";
+	}
+	delete[] mass;
+}
+void Search_CS_Percent( vector <CompressionStation>& vector_cs)
+{
+	int k = 0;
+	int percent;
+	int choice;
+	int* mass = Mas_int(vector_cs.size());
+	int* mass1 = Mas_int(vector_cs.size());
+	for (int i = 0; i < vector_cs.size(); i++)
+	{
+		mass[i] = vector_cs[i].percent;
+
+	}
+	cout << "Enter";
+	cin >> choice;
+	for (int i = 0; i < vector_cs.size(); i++)
+	{
+		if (mass[i] == choice)
+		{
+			mass1[k++] = i;
+		}
+
+	}
+	if (k != 0)
+	{
+		for (int i = 0; i < k; i++)
+		{
+			cout << " The  " << choice << endl << " Index: " << mass1[i] << endl;
+			cout << "Title:" << endl
+				<< vector_cs[i].title << endl
+				<< "Id: " << endl
+				<< vector_cs[i].id << endl
+				<< "Number of manufactories : " << endl
+				<< vector_cs[i].number << endl
+				<< "Number of working manufactories: " << endl
+				<< vector_cs[i].number_workshops << endl
+				<< "Efficiency: " << endl
+				<< vector_cs[i].efficiency << endl;
+		}
+	}
+	else
+	
+	{
+	cout << "This is no such pipe";
+	}
+	delete[] mass;
+	
+	
+}
 
 int get_vari()//считывание номера в меню
 {
@@ -370,7 +470,7 @@ int main() //вызов
 {
 	vector <pipe> vector_p; vector_p.resize(0);
 	pipe p{};
-    vector <CompressionStation> vector_cs; vector_cs.resize(0);
+	vector <CompressionStation> vector_cs; vector_cs.resize(0);
 	CompressionStation cs{};
 	int vari;
 	do
@@ -381,7 +481,7 @@ int main() //вызов
 		{
 		case 1:
 		{   AddPipe_vector(vector_p);
-			break;
+		break;
 		}
 		case 2:
 		{
@@ -390,31 +490,76 @@ int main() //вызов
 		}
 		case 4:
 		{
-			Search_pipe_name(vector_p);
 
+			menu_1();
+			int var;
+			var = get_vari();
+			switch (var)
+			{
+			case 1:
+			{
+				Search_pipe_name(vector_p);
+				break;
+			}
+			case 2
+			{
+				Search_Pipe_Sign(vector_p);
+				break;
+			}
+
+
+			}
 			break;
 		}
 		case 3:
-			
+		{
+
 			PrintVectors(vector_p, vector_cs);
 			//PrintCompressionStation(vector_cs);
 			break;
-		case 5: EditCompessionStation(cs);
-			break;
-		case 6:
-			Search_Pipe_Sign(vector_p);
-			break;
-		case 7:
-			
+		}
+		case 5:
+		{
+			menu_2();
+			int v;
+			v = get_vari();
+			switch (v)
+			{
+				case 1
+				{
+					Search_CS_Name(vector_cs);
+					break;
+				}
+				case 2
+				{
+					Search_CS_Percent(vector_cs;
+					break;
+				}
+
+			}
+
 			break;
 		}
+		case 6:
+		{
 
+			break;
+		}
+		case 7:
+		{
+			Search_CS_Name(vector_cs);
+			break;
+		}
+		
 
-			if (vari != 8) //бесконечный цикл
+		if (vari != 8) //бесконечный цикл
 			system("pause");
-	}
-while (vari != 8);
-	return 0; 
+		}
+	
+		while (vari != 8);
+		return 0;
+
+	
 }
 
 // Запуск программы: CTRL+F5 или меню "Отладка" > "Запуск без отладки"
